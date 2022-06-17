@@ -1,0 +1,87 @@
+body {
+    background-color: rgb(245, 193, 96);
+
+}
+
+.main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: rgb(255, 253, 253);
+    margin: 0 auto;
+    width: 55%;
+    height: 700px;
+    border-radius: 15px;
+}
+
+.dropZone {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.title-dropBox {
+    text-transform: uppercase;
+}
+
+.dropBox {
+    border: solid rgba(0, 0, 0, 0.719) 2px;
+    width: 400px;
+    height: 450px;
+    border-radius: 10px;
+    border-style: dashed;
+    background-color: rgba(224, 213, 213, 0.384);
+}
+
+.downloadZone {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.documentZone {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.docDownloaded {
+    text-align: center;
+}
+
+.uploadZone {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.Upload {
+    color: rgb(163, 153, 153);
+    background: rgb(0, 140, 255);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 5px 10px;
+    border-radius: 10px;
+    -webkit-animation: progress-bar 2s;
+    -moz-animation: progress-bar 2s;
+}
+
+.Upload div {
+    border: 1px solid rgb(0, 140, 255);
+    border-radius: 14px;
+}
+
+
+/* ANIMACIONES */
+@-webkit-keyframes progress-bar {
+    0% {
+        width: 0;
+    }
+}
+
+@-moz-keyframes progress-bar {
+    0% {
+        width: 0;
+    }
+}
