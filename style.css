@@ -1,5 +1,9 @@
 body {
     background-color: rgb(245, 193, 96);
+    font-family: 'Fira Mono', monospace;
+    width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
 
 }
 
@@ -26,12 +30,23 @@ body {
 }
 
 .dropBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: solid rgba(0, 0, 0, 0.719) 2px;
     width: 400px;
     height: 450px;
     border-radius: 10px;
     border-style: dashed;
     background-color: rgba(224, 213, 213, 0.384);
+}
+
+.dropBox button {
+    font-family: 'Fira Mono';
+    background-color: rgb(247, 183, 105);
+    border: solid rgba(255, 255, 255, 0) 1px;
+    border-radius: 5px;
+    padding: 0.5rem;
 }
 
 .downloadZone {
@@ -48,6 +63,11 @@ body {
 
 .docDownloaded {
     text-align: center;
+    width: 50px;
+}
+
+.iconoDoc {
+    width: 50px;
 }
 
 .uploadZone {
@@ -57,7 +77,7 @@ body {
 }
 
 .Upload {
-    color: rgb(163, 153, 153);
+    color: white;
     background: rgb(0, 140, 255);
     overflow: hidden;
     white-space: nowrap;
