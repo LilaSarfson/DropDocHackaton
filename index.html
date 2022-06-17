@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="799427492949-4cl8i09kkimcqqp6h60g9qaadsci85q1.apps.googleusercontent.com.apps.googleusercontent.com">
     <link rel="stylesheet" href="/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,11 +18,17 @@
         <div class="dropZone">
             <h2 class="title-dropBox"> Drop a File!</h2>
             <div class="dropBox">
-                <button>Agregar archivo</button>
-                <input type="file" id="input-file" hidden multiple>
+                <div class="droptext">
+                    <p>Puedes dropear tu archivo aquí o</p>
+                    <hr style="width:50%;text-align:left;margin: 0 auto">
+                    <button>Agregar archivo</button>
+                    <input type="file" id="input-file" hidden multiple>
+                </div>
             </div>
         </div>
         <div class="downloadZone">
+            <div id="gSignIn"></div>
+            <div class="userContent" style="display: none;"></div>
             <h3>Upload Documents</h3>
                 <div class="newDoc">
                     <div class="documentZone">
@@ -34,9 +41,9 @@
                         </div>
                     </div>
                 </div>
-        </div>
+            </div>
     </div>
-
+<script src="https://apis.google.com/js/client:platform.js?onload=renderButton" async defer></script>
 <script src="/main.js"></script>
 </body>
 
