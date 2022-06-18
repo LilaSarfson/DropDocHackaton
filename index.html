@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-client_id" content="799427492949-4cl8i09kkimcqqp6h60g9qaadsci85q1.apps.googleusercontent.com.apps.googleusercontent.com">
-    <link rel="stylesheet" href="/style.css">
+    <meta name="google-signin-client_id" content="799427492949-4cl8i09kkimcqqp6h60g9qaadsci85q1.apps.googleusercontent.com">
+    <link rel="stylesheet" href="static/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
     <title>Drop a document</title>
 </head>
 
@@ -20,15 +18,15 @@
             <div class="dropBox">
                 <div class="droptext">
                     <p>Puedes dropear tu archivo aquí o</p>
-                    <hr style="width:50%;text-align:left;margin: 0 auto">
                     <button>Agregar archivo</button>
                     <input type="file" id="input-file" hidden multiple>
                 </div>
             </div>
         </div>
         <div class="downloadZone">
-            <div id="gSignIn"></div>
-            <div class="userContent" style="display: none;"></div>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            <button id="authorize_button" onclick="handleAuthClick()">Authorize</button>
+        <button id="signout_button" onclick="handleSignoutClick()">Sign Out</button>
             <h3>Upload Documents</h3>
                 <div class="newDoc">
                     <div class="documentZone">
@@ -42,9 +40,11 @@
                     </div>
                 </div>
             </div>
-    </div>
-<script src="https://apis.google.com/js/client:platform.js?onload=renderButton" async defer></script>
-<script src="/main.js"></script>
+        </div>
+<script src="static/main.js"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+<script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 </body>
 
 </html>
