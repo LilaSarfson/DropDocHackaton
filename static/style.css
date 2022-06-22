@@ -49,14 +49,17 @@ body {
     border-radius: 5px;
     padding: 0.5rem;
 }
-.dropBox button:hover{
+
+.dropBox button:hover {
     cursor: pointer;
 }
-.droptext{
+
+.droptext {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
+
 .downloadZone {
     display: flex;
     flex-direction: column;
@@ -67,6 +70,11 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: center;
+}
+
+.fileName {
+    font-size: 20px;
+    font-family: 'Fira Mono';
 }
 
 .docDownloaded {
@@ -100,7 +108,7 @@ body {
     border-radius: 14px;
 }
 
-.newDoc{
+.newDoc {
     display: flex;
     flex-direction: column;
     align-items: stretch
