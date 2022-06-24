@@ -1,6 +1,6 @@
 let dropBox = document.querySelector(".dropBox");
-let button = dropBox.querySelector("button");
-let input = dropBox.querySelector("input");
+let button = document.querySelector(".button");
+let input = document.querySelector(".input");
 let dropZone = document.querySelector(".dropZone");
 let documentZone1 = document.querySelector(".newDoc");
 FileList = [];
@@ -76,21 +76,14 @@ function dragOverHandler(ev) {
 }
 
 dropBox.addEventListener("dragenter", event => {
-  // highlight potential drop target when the draggable element enters it
-  if (event.target.classList.contains("dropzone")) {
-    event.target.classList.add("dragover");
-  }
-  document.querySelector(".droptext p").textContent = "Suelta aquí tu archivo";
-  event.preventDefault();
+  document.querySelector(".dropBox p").textContent = "Suelta aquí tu archivo";
+  event.stopPropagation();
+  
 });
 
 dropBox.addEventListener("dragleave", event => {
-  // reset background of potential drop target when the draggable element leaves it
-  if (event.target.classList.contains("dropzone")) {
-    event.target.classList.remove("dragover");
-  }
-  document.querySelector(".droptext p").textContent = "Puedes dropear tu archivo aquí o"
-  event.preventDefault();
+  document.querySelector(".dropBox p").textContent = "Puedes dropear tu archivo aquí o"
+  event.stopPropagation();
 });
 
 // let textbox = document.querySelector(".droptext");
