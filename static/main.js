@@ -20,14 +20,14 @@ function clickOnInput() {
 // Añadir un archivo con el botón
 
 input.addEventListener("change", (e) => {
-  files = input.files;
+  file = dataTransfer.files;
   documentZone1.innerHTML += `
     <div class="documentZone">
                         <div class="docDownloaded"><img class="iconoDoc" src="./Image/pictures.png" alt=""></div>
                         <div class="uploadZone">
-                            <h3 class="fileName">NombredeArchivo1</h3>
-                            <div style="width: 50%" class="Upload">
-                                <div>80 %</div>
+                            <h3 class="fileName">${file.name}</h3>
+                            <div style="width: 100%" class="Upload">
+                                <div>100 %</div>
                             </div>
                         </div>
                     </div>
@@ -40,6 +40,7 @@ input.addEventListener("change", (e) => {
 
 dropBox.addEventListener('dragover', dragOverHandler, false)
 dropBox.addEventListener('drop', dropHandler, false)
+isDropped = false;
 
 function dropHandler(ev) {
   console.log('File(s) dropped');
@@ -64,52 +65,27 @@ function dropHandler(ev) {
     <div class="docDownloaded"><img class="iconoDoc"  alt=""></div>
     <div class="uploadZone">
     <h3 class="fileName">${multipleFile.name}</h3>
-        <div style="width: 50%" class="Upload">
-        <div>80 %</div>
+        <div style="width: 100%" class="Upload">
+        <div>100 %</div>
         </div>
         </div>
         </div>
         `
+  if (dropBox.style.backgroundImage = "url('/Image/filec.png')"){
+    dropBox.style.backgroundImage = "url('/Image/fileb.png')";
+  }
 }
 function dragOverHandler(ev) {
   ev.preventDefault();
 }
 
 dropBox.addEventListener("dragenter", event => {
-  document.querySelector(".dropBox p").textContent = "Suelta aquí tu archivo";
-  event.stopPropagation();
-  
+ dropBox.style.backgroundImage = "url('/Image/filec.png')";
 });
 
 dropBox.addEventListener("dragleave", event => {
-  document.querySelector(".dropBox p").textContent = "Puedes dropear tu archivo aquí o"
-  event.stopPropagation();
+  dropBox.style.backgroundImage = "url('/Image/fileb.png')";
 });
-
-// let textbox = document.querySelector(".droptext");
-
-// textbox.addEventListener("dragenter", event => {
-//   // highlight potential drop target when the draggable element enters it
-//   if (event.target.classList.contains("dropzone")) {
-//     event.target.classList.add("dragover");
-//   }
-//   document.querySelector(".droptext p").textContent = "Suelta aquí tu archivo";
-//   event.preventDefault();
-// });
-
-
-
-// textbox.addEventListener("dragleave", event => {
-//   // reset background of potential drop target when the draggable element leaves it
-//   if (event.target.classList.contains("dropzone")) {
-//     event.target.classList.remove("dragover");
-//     console.log("funcionoo")
-//   }
-//   document.querySelector(".droptext p").textContent = "Puedes dropear tu archivo aquí o"
-//   event.preventDefault();
-// });
-
-
 
 
 //  GOOGLE AUTHENTICATOR
@@ -210,3 +186,17 @@ function onSignIn(googleUser) {
   console.log('Image URL: ' + profile.getImageUrl());
   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 }
+
+
+const drive = google.drive({ version: "v3", auth });
+drive.files.list({}, (err, res) => {
+  if (err) throw err;
+  const files = res.data.files;
+  if (files.length) {
+  files.map((file) => {
+    console.log(file);
+  });
+  } else {
+    console.log('No files found');
+  }
+});

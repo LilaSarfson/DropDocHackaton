@@ -25,10 +25,13 @@ body {
     justify-content: center;
     text-align: center;
     width: 50%;
+    align-items: center;
+    gap: 1rem;
 }
 
 .title-dropBox {
     text-transform: uppercase;
+    margin: 0;
 }
 
 .dropBox {
@@ -43,14 +46,20 @@ body {
     background-color: rgba(224, 213, 213, 0.384);
     flex-direction: column;
     gap: 1rem;
+    background-image: url(/Image/fileb.png);
+    background-repeat: no-repeat;
+    background-size: 40%;
+    background-position: center;
+    opacity: 0.8;
 }
 
-.dropBox button {
+.button {
     font-family: 'Fira Mono';
     background-color: rgb(247, 183, 105);
     border: solid rgba(255, 255, 255, 0) 1px;
     border-radius: 5px;
     padding: 0.5rem;
+    color: black;
 }
 
 .dropBox button:hover {
@@ -60,18 +69,27 @@ body {
 .downloadZone {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+
 }
 
+.newDoc {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-height: 550px;
+    overflow-y: auto;
+}
 .documentZone {
     display: flex;
     flex-direction: row;
     justify-content: center;
+
 }
 
 .fileName {
     font-size: 20px;
     font-family: 'Fira Mono';
+    margin: 0;
 }
 
 .docDownloaded {
@@ -91,24 +109,18 @@ body {
 
 .Upload {
     color: white;
-    background: rgb(0, 140, 255);
+    background: rgb(116, 166, 207);
     overflow: hidden;
     white-space: nowrap;
-    padding: 5px 10px;
+    padding: 2px 4px;
     border-radius: 10px;
-    -webkit-animation: progress-bar 2s;
-    -moz-animation: progress-bar 2s;
+    -webkit-animation: progress-bar 3s;
+    -moz-animation: progress-bar 3s;
 }
 
 .Upload div {
-    border: 1px solid rgb(0, 140, 255);
+    border: 0.5px solid rgb(116, 166, 207);
     border-radius: 14px;
-}
-
-.newDoc {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch
 }
 
 
