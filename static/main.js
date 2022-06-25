@@ -20,7 +20,8 @@ function clickOnInput() {
 // Añadir un archivo con el botón
 
 input.addEventListener("change", (e) => {
-  file = dataTransfer.files;
+  e.preventDefault();
+  file = e.dataTransfer.files;
   documentZone1.innerHTML += `
     <div class="documentZone">
                         <div class="docDownloaded"><img class="iconoDoc" src="./Image/pictures.png" alt=""></div>
@@ -71,20 +72,20 @@ function dropHandler(ev) {
         </div>
         </div>
         `
-  if (dropBox.style.backgroundImage = "url('../Image/filec.png')"){
-    dropBox.style.backgroundImage = "url('../Image/fileb.png')";
-  }
+  // if (dropBox.style.backgroundImage = "url('Image\filec.png')"){
+  //   dropBox.style.backgroundImage = "url('Image\fileb.png')";
+  // }
 }
 function dragOverHandler(ev) {
   ev.preventDefault();
 }
 
 dropBox.addEventListener("dragenter", event => {
- dropBox.style.backgroundImage = "url('../Image/filec.png')";
+//  dropBox.style.backgroundImage = "url('../Image/filec.png')";
 });
 
 dropBox.addEventListener("dragleave", event => {
-  dropBox.style.backgroundImage = "url('../Image/fileb.png')";
+  // dropBox.style.backgroundImage = "url('../Image/fileb.png')";
 });
 
 
@@ -98,7 +99,7 @@ const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/res
 
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
-const SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly';
+const SCOPES = 'https://www.googleapis.com/auth/drive.file';
 
 let tokenClient;
 let gapiInited = false;
@@ -159,7 +160,6 @@ function handleAuthClick() {
     }
     document.getElementById('signout_button').style.visibility = 'visible';
     document.getElementById('authorize_button').style.visibility = 'hidden';
-    await listFiles();
   };
 
   if (gapi.client.getToken() === null) {
@@ -186,28 +186,114 @@ function handleSignoutClick() {
   }
 }
 
-/**
- * Print metadata for first 10 files.
- */
-async function listFiles() {
-  let response;
-  try {
-    response = await gapi.client.drive.files.list({
-      'pageSize': 10,
-      'fields': 'files(id, name)',
-    });
-  } catch (err) {
-    document.getElementById('content').innerText = err.message;
-    return;
-  }
-  const files = response.result.files;
-  if (!files || files.length == 0) {
-    document.getElementById('content').innerText = 'No files found.';
-    return;
-  }
-  // Flatten to string to display
-  const output = files.reduce(
-      (str, file) => `${str}${file.name} (${file.id}\n`,
-      'Files:\n');
-  document.getElementById('content').innerText = output;
+// Upload files at Google Drive
+
+
+
+//Creamos una carpeta en el drive del usuario
+function createFolder(){
+  return gapi.client.drive.files.insert(
+      {
+          'resource':{
+              "title":'Drive API From JS Sample',
+              "mimeType": "application/vnd.google-apps.folder"
+          }
+      }
+  )
+
+
+//Verifica que la carpeta exista y la crea si no es así
+}function ensureUploadFolderPresent(){
+  return gapi.client.drive.files.list(
+      {q:"mimeType = 'application/vnd.google-apps.folder' and trashed = false"}
+  ).then(function(files){
+      var directory=files.result.items;
+
+      if(!directory.length){
+          return createFolder().then(function(res){
+              return res.result;
+          });
+      }else{
+          return directory[0];
+      }
+  });
+}
+
+
+function insertFile(fileData, filename,parentId) {
+  var deferred = $q.defer();
+
+  var boundary = '-------314159265358979323846';
+  var delimiter = "\r\n--" + boundary + "\r\n";
+  var close_delim = "\r\n--" + boundary + "--";
+
+  var reader = new FileReader();
+  reader.readAsBinaryString(fileData);
+  reader.onload = function (e) {
+      var contentType = fileData.type || 'application/octet-stream';
+      var metadata = {
+          'title': filename,
+          'mimeType': contentType,
+          "parents": [{"id":parentId}]
+      };
+
+      var base64Data = btoa(reader.result);
+      var multipartRequestBody =
+          delimiter +
+          'Content-Type: application/json\r\n\r\n' +
+          JSON.stringify(metadata) +
+          delimiter +
+          'Content-Type: ' + contentType + '\r\n' +
+          'Content-Transfer-Encoding: base64\r\n' +
+          '\r\n' +
+          base64Data +
+          close_delim;
+
+      var request = gapi.client.request({
+          'path': '/upload/drive/v2/files',
+          'method': 'POST',
+          'params': {'uploadType': 'multipart'},
+          'headers': {
+              'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+          },
+          'body': multipartRequestBody});
+      request.then(function(file){
+          deferred.resolve(file.result);
+      },function(reason){
+          deferred.reject(reason);
+      });
+  };
+
+  return deferred.promise;
+
+}
+function waitForFileToBecomeActive(fileId){
+  var deferred = $q.defer();
+
+  gapi.client.request({
+      'path': '/drive/v2/files/'+fileId,
+      'method': 'GET'
+  }).then(function(){
+      deferred.resolve();
+  },function(){
+      setTimeout(function(){
+          waitForFileToBecomeActive(fileId).then(function(){
+              deferred.resolve();
+          },function(reason){
+              deferred.reject(reason);
+          })
+      },1000);
+  });
+
+  return deferred.promise;
+}
+function insertPermission(file){
+  return gapi.client.drive.permissions.insert({
+      'fileId': file.id,
+      'resource': {
+          "withLink": true,
+          "role": "reader",
+          "type": "anyone"
+      }
+  })
 }

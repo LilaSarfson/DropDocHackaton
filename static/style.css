@@ -83,6 +83,7 @@ body {
     max-width: 350px;
     min-width: 350px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 .documentZone {
     display: flex;
