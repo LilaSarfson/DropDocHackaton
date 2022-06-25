@@ -71,8 +71,8 @@ function dropHandler(ev) {
         </div>
         </div>
         `
-  if (dropBox.style.backgroundImage = "url('/Image/filec.png')"){
-    dropBox.style.backgroundImage = "url('/Image/fileb.png')";
+  if (dropBox.style.backgroundImage = "url('../Image/filec.png')"){
+    dropBox.style.backgroundImage = "url('../Image/fileb.png')";
   }
 }
 function dragOverHandler(ev) {
@@ -80,23 +80,26 @@ function dragOverHandler(ev) {
 }
 
 dropBox.addEventListener("dragenter", event => {
- dropBox.style.backgroundImage = "url('/Image/filec.png')";
+ dropBox.style.backgroundImage = "url('../Image/filec.png')";
 });
 
 dropBox.addEventListener("dragleave", event => {
-  dropBox.style.backgroundImage = "url('/Image/fileb.png')";
+  dropBox.style.backgroundImage = "url('../Image/fileb.png')";
 });
 
 
 //  GOOGLE AUTHENTICATOR
 
-// Credenciales google
 const CLIENT_ID = '799427492949-4cl8i09kkimcqqp6h60g9qaadsci85q1.apps.googleusercontent.com';
-const API_KEY = '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';
+const API_KEY = 'AIzaSyDm7VUHic_xLq_bgBu50Yfv_W-3nDSql78';
 
+// Discovery doc URL for APIs used by the quickstart
 const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
 
-const SCOPES = 'https://www.googleapis.com/drive.file';
+// Authorization scopes required by the API; multiple scopes can be
+// included, separated by spaces.
+const SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly';
+
 let tokenClient;
 let gapiInited = false;
 let gisInited = false;
@@ -155,19 +158,23 @@ function handleAuthClick() {
       throw (resp);
     }
     document.getElementById('signout_button').style.visibility = 'visible';
-    document.getElementById('authorize_button').innerText = 'Refresh';
+    document.getElementById('authorize_button').style.visibility = 'hidden';
     await listFiles();
   };
 
   if (gapi.client.getToken() === null) {
     // Prompt the user to select a Google Account and ask for consent to share their data
     // when establishing a new session.
-    tokenClient.requestAccessToken({ prompt: 'consent' });
+    tokenClient.requestAccessToken({prompt: 'consent'});
   } else {
     // Skip display of account chooser and consent dialog for an existing session.
-    tokenClient.requestAccessToken({ prompt: '' });
+    tokenClient.requestAccessToken({prompt: ''});
   }
 }
+
+/**
+ *  Sign out the user upon button click.
+ */
 function handleSignoutClick() {
   const token = gapi.client.getToken();
   if (token !== null) {
@@ -179,24 +186,28 @@ function handleSignoutClick() {
   }
 }
 
-function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Name: ' + profile.getName());
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-}
-
-
-const drive = google.drive({ version: "v3", auth });
-drive.files.list({}, (err, res) => {
-  if (err) throw err;
-  const files = res.data.files;
-  if (files.length) {
-  files.map((file) => {
-    console.log(file);
-  });
-  } else {
-    console.log('No files found');
+/**
+ * Print metadata for first 10 files.
+ */
+async function listFiles() {
+  let response;
+  try {
+    response = await gapi.client.drive.files.list({
+      'pageSize': 10,
+      'fields': 'files(id, name)',
+    });
+  } catch (err) {
+    document.getElementById('content').innerText = err.message;
+    return;
   }
-});
+  const files = response.result.files;
+  if (!files || files.length == 0) {
+    document.getElementById('content').innerText = 'No files found.';
+    return;
+  }
+  // Flatten to string to display
+  const output = files.reduce(
+      (str, file) => `${str}${file.name} (${file.id}\n`,
+      'Files:\n');
+  document.getElementById('content').innerText = output;
+}
