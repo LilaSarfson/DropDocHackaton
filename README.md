@@ -12,6 +12,7 @@ La aplicación consigue conectarse a Google a través de las credenciales creada
 Este proyecto también está vinculado a la API de Google Drive, aunque no consigue subir los archivos con éxito al drive del usuario.
  
 ## Cómo probar al aplicación y recomendaciones de uso |
+Primeramente, me gustaría recalcar, que las condiciones óptimas para el uso de esta App son: abrirla en un navegador de incógnito de Google Chrome y posicionar la carpeta en el servidor Apache de Xampp, ya que es la URI autorizada dentro de Google para el proyecto. Aunque, también debería funcionar con la githubPages.
 
  Si se quiere usar sin hacer el resgistro en Google, simplemente, el usuario debe arrastrar y soltar el archivo en la zona de "Drop a File!" identificada con la iamgen de una carpeta, o bien, puede hacerlo de la manera tracional, usando el botón de "Agregar archivo".
 Acto seguido debería agregarse el nombre del archivo en la parte derecha de la aplicación.
@@ -22,6 +23,7 @@ Por otro lado, si se quiere hacerlo mediante el registro en Google, debe seguir 
 3: Cargar los archivos como anteriormente.
 ![Alt text](/assets/PASOS.png)
  
+
 ## Stack | 
 Los lenguajes utiliazado han sido: JavaScript, HTML, CSS3 y la librería de Pico.css.
 Para la conexión con Google drive, obviamente me he servido de la API de Google Drive, utilizando su documentación y la sabiduría de StackOverFlow.
