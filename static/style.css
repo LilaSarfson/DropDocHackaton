@@ -102,11 +102,6 @@ text-align: center;
     text-align: center;
     width: 50px;
 }
-
-/* .iconoDoc {
-    width: 50px;
-} */
-
 .uploadZone {
     display: flex;
     flex-direction: column;
@@ -141,3 +136,20 @@ text-align: center;
         width: 0;
     }
 }
+
+/*MEDIA QUERY*/
+
+@media (max-width: 1080px){
+.main {
+    width: 90vw; 
+    height: 60vh;
+}
+
+}
+@media (max-width: 678px){
+    .main {
+        width: 90vw; 
+        height: 70vh;
+    }
+    
+    }

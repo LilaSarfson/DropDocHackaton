@@ -3,7 +3,6 @@ let button = document.querySelector(".button");
 let input = document.querySelector(".input");
 let dropZone = document.querySelector(".dropZone");
 let documentZone1 = document.querySelector(".newDoc");
-FileList = [];
 
 button.addEventListener("click", (event) => {
   event.preventDefault();
@@ -12,7 +11,6 @@ button.addEventListener("click", (event) => {
 });
 
 function clickOnInput() {
-
   input.click();
 
 };
@@ -21,27 +19,24 @@ function clickOnInput() {
 
 input.addEventListener("change", (e) => {
   e.preventDefault();
-  file = e.dataTransfer.files;
+  // file = e.dataTransfer.files;
   documentZone1.innerHTML += `
     <div class="documentZone">
                         <div class="docDownloaded"><img class="iconoDoc" src="./Image/pictures.png" alt=""></div>
                         <div class="uploadZone">
-                            <h3 class="fileName">${file.name}</h3>
+                            <h3 class="fileName">${input.files[0].name}</h3>
                             <div style="width: 100%" class="Upload">
                                 <div>100 %</div>
                             </div>
                         </div>
                     </div>
     `
-  fileList = fileList + files;
-  console.log(fileList)
 })
 
 // Añadir un archivo dropeandolo
 
 dropBox.addEventListener('dragover', dragOverHandler, false)
 dropBox.addEventListener('drop', dropHandler, false)
-isDropped = false;
 
 function dropHandler(ev) {
   console.log('File(s) dropped');
@@ -72,20 +67,23 @@ function dropHandler(ev) {
         </div>
         </div>
         `
-  // if (dropBox.style.backgroundImage = "url('Image\filec.png')"){
-  //   dropBox.style.backgroundImage = "url('Image\fileb.png')";
-  // }
+  if (dropBox.style.backgroundImage = "url('/Image/filec.png')"){
+    dropBox.style.backgroundImage = "url('/Image/fileb.png')";
+  }
 }
 function dragOverHandler(ev) {
   ev.preventDefault();
 }
 
+
 dropBox.addEventListener("dragenter", event => {
-//  dropBox.style.backgroundImage = "url('../Image/filec.png')";
+  event.preventDefault();
+ dropBox.style.backgroundImage = "url('/Image/filec.png')";
 });
 
 dropBox.addEventListener("dragleave", event => {
-  // dropBox.style.backgroundImage = "url('../Image/fileb.png')";
+  event.preventDefault();
+  dropBox.style.backgroundImage = "url('/Image/fileb.png')";
 });
 
 
