@@ -1,34 +1,37 @@
+
 let dropBox = document.querySelector(".dropBox");
 let button = document.querySelector(".button");
 let input = document.querySelector(".input");
 let dropZone = document.querySelector(".dropZone");
 let documentZone1 = document.querySelector(".newDoc");
 
+let fileArray = [];
+
+
 button.addEventListener("click", (event) => {
   event.preventDefault();
   clickOnInput();
-  console.log(input.files)
 });
 
 function clickOnInput() {
   input.click();
-
 };
 
 // Añadir un archivo con el botón
 
 input.addEventListener("change", (e) => {
   e.preventDefault();
-  // file = e.dataTransfer.files;
+      fileArray.push(input.files[0]);
+
   documentZone1.innerHTML += `
-    <div class="documentZone">
-                        <div class="docDownloaded"><img class="iconoDoc" src="./Image/pictures.png" alt=""></div>
-                        <div class="uploadZone">
-                            <h3 class="fileName">${input.files[0].name}</h3>
-                            <div style="width: 100%" class="Upload">
-                                <div>100 %</div>
-                            </div>
-                        </div>
+  <div class="documentZone">
+  <div class="docDownloaded"></div>
+  <div class="uploadZone">
+  <h3 class="fileName">${input.files[0].name}</h3>
+  <div style="width: 100%" class="Upload">
+  <div>100 %</div>
+  </div>
+  </div>
                     </div>
     `
 })
@@ -39,13 +42,14 @@ dropBox.addEventListener('dragover', dragOverHandler, false)
 dropBox.addEventListener('drop', dropHandler, false)
 
 function dropHandler(ev) {
-  console.log('File(s) dropped');
   ev.preventDefault();
   if (ev.dataTransfer.items) {
     // Use DataTransferItemList interface to access the file(s)
     for (let i = 0; i < ev.dataTransfer.items.length; i++) {
       multipleFile = ev.dataTransfer.files[i]
-      console.log(multipleFile);
+      fileArray.push(multipleFile);
+    
+
       // If dropped items aren't files, reject them
       if (ev.dataTransfer.items[i].kind === 'file') {
         const file = ev.dataTransfer.items[i].getAsFile();
@@ -58,17 +62,18 @@ function dropHandler(ev) {
   }
   documentZone1.innerHTML += `
   <div class="documentZone">
-    <div class="docDownloaded"><img class="iconoDoc"  alt=""></div>
-    <div class="uploadZone">
-    <h3 class="fileName">${multipleFile.name}</h3>
-        <div style="width: 100%" class="Upload">
-        <div>100 %</div>
-        </div>
-        </div>
-        </div>
-        `
-  if (dropBox.style.backgroundImage = "url('/Image/filec.png')"){
-    dropBox.style.backgroundImage = "url('/Image/fileb.png')";
+  <div class="docDownloaded">
+  </div>
+  <div class="uploadZone">
+      <h3 class="fileName">${multipleFile.name}</h3>
+      <div style="width: 100%" class="Upload">
+          <div>100 %</div>
+      </div>
+  </div>
+</div>
+  `
+  if (dropBox.style.backgroundImage = "url('./Image/filec.png')"){
+    dropBox.style.backgroundImage = "url('./Image/fileb.png')";
   }
 }
 function dragOverHandler(ev) {
@@ -78,12 +83,12 @@ function dragOverHandler(ev) {
 
 dropBox.addEventListener("dragenter", event => {
   event.preventDefault();
- dropBox.style.backgroundImage = "url('/Image/filec.png')";
+ dropBox.style.backgroundImage = "url('./Image/filec.png')";
 });
 
 dropBox.addEventListener("dragleave", event => {
   event.preventDefault();
-  dropBox.style.backgroundImage = "url('/Image/fileb.png')";
+  dropBox.style.backgroundImage = "url('./Image/fileb.png')";
 });
 
 
@@ -104,8 +109,6 @@ let gapiInited = false;
 let gisInited = false;
 
 document.getElementById('authorize_button').style.visibility = 'hidden';
-document.getElementById('signout_button').style.visibility = 'hidden';
-
 /**
  * Callback after api.js is loaded.
  */
@@ -156,7 +159,6 @@ function handleAuthClick() {
     if (resp.error !== undefined) {
       throw (resp);
     }
-    document.getElementById('signout_button').style.visibility = 'visible';
     document.getElementById('authorize_button').style.visibility = 'hidden';
   };
 
@@ -170,25 +172,9 @@ function handleAuthClick() {
   }
 }
 
-/**
- *  Sign out the user upon button click.
- */
-function handleSignoutClick() {
-  const token = gapi.client.getToken();
-  if (token !== null) {
-    google.accounts.oauth2.revoke(token.access_token);
-    gapi.client.setToken('');
-    document.getElementById('content').innerText = '';
-    document.getElementById('authorize_button').innerText = 'Authorize';
-    document.getElementById('signout_button').style.visibility = 'hidden';
-  }
-}
-
 // Upload files at Google Drive
 
-
-
-//Creamos una carpeta en el drive del usuario
+// Creamos una carpeta en el drive del usuario
 function createFolder(){
   return gapi.client.drive.files.insert(
       {
@@ -218,7 +204,7 @@ function createFolder(){
 }
 
 
-function insertFile(fileData, filename,parentId) {
+function insertFile(fileData, callback) {
   var deferred = $q.defer();
 
   var boundary = '-------314159265358979323846';
@@ -255,43 +241,12 @@ function insertFile(fileData, filename,parentId) {
               'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
           },
           'body': multipartRequestBody});
-      request.then(function(file){
-          deferred.resolve(file.result);
-      },function(reason){
-          deferred.reject(reason);
-      });
-  };
+          if (!callback) {
+            callback = function () {
+              createToast(`<i class="fa-solid fa-arrow-up-from-line"></i>`, `Se ha subido tu archivo`, `El archivo ${fileData.fileName || fileData.name} se ha subido correctamente a tu cuenta de google drive` );
+            };
+          }
+          request.execute(callback);
+        }
 
-  return deferred.promise;
-
-}
-function waitForFileToBecomeActive(fileId){
-  var deferred = $q.defer();
-
-  gapi.client.request({
-      'path': '/drive/v2/files/'+fileId,
-      'method': 'GET'
-  }).then(function(){
-      deferred.resolve();
-  },function(){
-      setTimeout(function(){
-          waitForFileToBecomeActive(fileId).then(function(){
-              deferred.resolve();
-          },function(reason){
-              deferred.reject(reason);
-          })
-      },1000);
-  });
-
-  return deferred.promise;
-}
-function insertPermission(file){
-  return gapi.client.drive.permissions.insert({
-      'fileId': file.id,
-      'resource': {
-          "withLink": true,
-          "role": "reader",
-          "type": "anyone"
-      }
-  })
 }

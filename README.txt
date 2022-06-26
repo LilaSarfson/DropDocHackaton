@@ -19,7 +19,7 @@ El nombre, la descripción y el uso de este módulo me parecen atractivos. Es mu
  
 La sección de API debe detallar los objetos y funciones del módulo, sus firmas, tipos de devolución, devoluciones de llamada y eventos en detalle. Los tipos deben incluirse donde no sean obvios. Deben dejarse claras las advertencias.
  
-## Installation
+## Cómo probar al aplicación y recomendaciones de uso
  
 Dentro de un ecosistema en particular, puede haber una forma común de instalar cosas, como usar Yarn, NuGet o Homebrew. Sin embargo, considere la posibilidad de que quien esté leyendo su archivo README sea un novato y desee más orientación. Enumerar los pasos específicos ayuda a eliminar la ambigüedad y hace que las personas usen su proyecto lo más rápido posible. Si solo se ejecuta en un contexto específico, como una versión de lenguaje de programación o un sistema operativo en particular, o tiene dependencias que deben instalarse manualmente, agregue también una subsección de Requisitos.
  
